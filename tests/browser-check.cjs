@@ -479,6 +479,17 @@ async function main() {
         const bounds = gutter.getBoundingClientRect();
         return bounds.left >= pre.left && bounds.right <= pre.right;
       }), true, "the line-number gutter stays visible when narrow code scrolls horizontally");
+      const gutterClip = await numberedWindow.locator("pre").evaluate((pre) => {
+        window.scrollBy(0, pre.getBoundingClientRect().top - document.querySelector(".topbar").getBoundingClientRect().bottom - 12);
+        const bounds = pre.getBoundingClientRect();
+        const gutter = pre.querySelector(".code-line-numbers").getBoundingClientRect();
+        return { x: Math.ceil(bounds.left), y: Math.ceil(gutter.top), width: Math.floor(gutter.right) - Math.ceil(bounds.left), height: Math.floor(gutter.bottom) - Math.ceil(gutter.top) };
+      });
+      const visibleGutter = await page.screenshot({ clip: gutterClip, animations: "disabled" });
+      await numberedWindow.locator("code").evaluate((code) => { code.style.visibility = "hidden"; });
+      const gutterWithoutCode = await page.screenshot({ clip: gutterClip, animations: "disabled" });
+      await numberedWindow.locator("code").evaluate((code) => { code.style.removeProperty("visibility"); });
+      assert.equal(visibleGutter.equals(gutterWithoutCode), true, "scrolled code cannot show through or to the left of the line-number gutter");
       await page.setViewportSize({ width: 1440, height: 1000 });
       await numberedWindow.screenshot({ path: path.join(require("node:os").tmpdir(), "opencode", "arod-numbered-code.png"), animations: "disabled" });
       const copyButton = numberedWindow.locator(".copy-button");

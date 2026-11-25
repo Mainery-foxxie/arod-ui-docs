@@ -540,7 +540,7 @@ h1 {
   max-inline-size: 100%;
   max-block-size: 34rem;
   margin: 0;
-  padding: 1rem 1.1rem 1.2rem;
+  padding: 1rem 0 1.2rem;
   overflow: auto;
   scrollbar-color: #9d6681 #402c3c;
   tab-size: 4;
@@ -552,6 +552,7 @@ h1 {
   flex: none;
   min-inline-size: 2ch;
   margin-inline-end: 1rem;
+  padding-inline-start: 1.1rem;
   padding-inline-end: 0.9rem;
   border-inline-end: 1px solid #593d50;
   background: var(--code);
@@ -566,6 +567,7 @@ h1 {
 
 .code-frame code {
   flex: none;
+  padding-inline-end: 1.1rem;
   color: inherit;
   font-family: var(--mono);
   font-size: 0.84rem;
