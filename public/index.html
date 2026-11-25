@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" data-theme="midnight">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#18141c">
+    <meta name="color-scheme" content="dark">
+    <script>
+      try {
+        if (localStorage.getItem("arod-ui-theme") === "sakura") {
+          document.documentElement.dataset.theme = "sakura";
+          document.querySelector('meta[name="color-scheme"]').content = "light";
+          document.querySelector('meta[name="theme-color"]').content = "#fff9fb";
+        }
+      } catch {}
+    </script>
+    <meta name="description" content="The guide to arod UI, a window-based Roblox Luau interface library.">
+    <title>Getting started | arod UI</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:wght@500;600&family=Luckiest+Guy&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to documentation</a>
+
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="icon-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></g></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="icon-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></g></symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/></symbol>
+        <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+        <symbol id="icon-zap" viewBox="0 0 24 24"><path d="m13 2-3 8H4l7 12 3-8h6L13 2Z"/></symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v2"/></symbol>
+        <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M8 7v14m8-14v14"/></symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+        <symbol id="icon-keyboard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 15h10"/></symbol>
+        <symbol id="icon-play" viewBox="0 0 24 24"><path d="m7 3 14 9L7 21V3Z"/></symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1v3l-2 2 2 2v3l3 1 1 3h6l1-3 3-1v-3l2-2-2-2V7l-3-1-1-3H9Z"/></symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2ZM7 3v6h10V3M7 21v-8h10v8"/></symbol>
+        <symbol id="icon-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-4 1.5 1.5 0 0 1 1-3h2a4 4 0 0 0 4-4c0-4-4-7-9-7Z"/><path d="M7 10h.01M10 7h.01M15 7h.01M18 10h.01"/></symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol>
+        <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 4h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6 6a7 7 0 0 1 12 1l2 5M4 12l2 5a7 7 0 0 0 12 1"/></symbol>
+        <symbol id="icon-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+        <symbol id="icon-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+      </defs>
+    </svg>
+
+    <header class="topbar">
+      <a class="brand" href="#getting-started" aria-label="arod UI home">
+        <img class="brand-logo" src="./favicon.svg" width="32" height="30" alt="">
+        <span>arod <span class="brand-ui">UI</span></span>
+      </a>
+      <button class="icon-text-button menu-button" type="button" aria-label="Open documentation menu" aria-expanded="false" popovertarget="documentation-navigation" aria-controls="documentation-navigation">
+        <span class="menu-glyph" aria-hidden="true">☰</span>
+        <span>Menu</span>
+      </button>
+      <button class="search-trigger" type="button" aria-label="Search the documentation" aria-haspopup="dialog" aria-controls="search-dialog">
+        <span class="search-glyph" aria-hidden="true"></span>
+        <span>Search docs</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+      <span class="header-spacer"></span>
+      <button class="theme-toggle icon-text-button" type="button" aria-label="Midnight theme. Switch to Sakura">Midnight</button>
+      <button class="language-toggle icon-text-button" type="button" aria-label="Switch to Bahasa Indonesia">EN / ID</button>
+      <a class="source-link" href="https://github.com/Religius-Star/Main" target="_blank" rel="noreferrer" aria-label="Source on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#icon-github"/></svg><span class="source-label">Source</span></a>
+    </header>
+
+    <aside class="storage-notice" aria-label="Cookie and storage notice">
+      <p>No cookies or analytics. This site remembers your theme, language and this notice on your device.</p>
+      <a href="#cookie-policy">Cookie policy</a>
+      <button class="notice-dismiss icon-text-button" type="button">Got it</button>
+    </aside>
+
+    <div class="page-layout">
+      <aside class="sidebar" aria-label="Documentation sidebar">
+        <nav id="documentation-navigation" aria-label="Documentation">
+          <div id="sidebar-navigation"></div>
+        </nav>
+        <p class="sidebar-note">Made for the details.</p>
+      </aside>
+
+      <main class="article-column" id="main-content" tabindex="-1">
+        <article id="article" aria-live="polite">
+          <p class="breadcrumb">arod UI / Start here</p>
+          <h1>Getting started</h1>
+          <p class="page-description">A small, flexible Roblox interface library with folders, themes, saved settings, and global search.</p>
+          <p class="loading-message">Loading the docs…</p>
+        </article>
+        <section class="community-section" aria-labelledby="community-title" hidden>
+          <div class="community-server">
+            <img class="community-icon" src="./discord-icon.png" width="40" height="40" alt="">
+            <div>
+              <p class="community-server-name">Alwi Hub Script</p>
+              <a class="community-invite" id="discord-invite" href="https://discord.gg/A5fmd9nBbD" target="_blank" rel="noreferrer">discord.gg/A5fmd9nBbD</a>
+            </div>
+            <span class="community-server-label">Discord</span>
+          </div>
+          <div class="community-content">
+            <h2 id="community-title">Need help or found a bug?</h2>
+            <p class="community-description">Report bugs, ask questions, and follow project updates in our Discord community.</p>
+            <dl class="community-stats">
+              <div><dt class="community-online-label">Online</dt><dd data-discord-count="online">—</dd></div>
+              <div><dt class="community-offline-label">Offline</dt><dd data-discord-count="offline">—</dd></div>
+              <div><dt class="community-members-label">Members</dt><dd data-discord-count="members">—</dd></div>
+            </dl>
+            <div class="community-actions">
+              <a class="community-join" href="https://discord.gg/A5fmd9nBbD" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#icon-discord"/></svg><span class="community-join-label">Join our Discord</span></a>
+              <span class="community-copy-wrap">
+                <button class="community-copy" type="button" command="--copy" commandfor="discord-invite"><span class="copy-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><use href="#icon-copy"/></svg></span><span class="copy-label">Copy invite</span></button>
+                <span class="copy-feedback" role="status"></span>
+              </span>
+            </div>
+            <p class="community-counts-note">Loading member counts…</p>
+          </div>
+        </section>
+        <nav class="page-navigation" aria-label="Documentation pages">
+          <a class="previous-page" hidden></a>
+          <a class="next-page" hidden></a>
+        </nav>
+        <footer class="article-footer">
+          <span>Source-checked API reference</span>
+          <span>arod UI · Documentation</span>
+          <a href="#cookie-policy">Cookie policy</a>
+        </footer>
+      </main>
+
+      <aside class="contents-sidebar" aria-label="Page contents">
+        <p class="contents-heading">On this page</p>
+        <nav id="contents-navigation" aria-label="On this page"></nav>
+        <a class="back-to-top" href="#main-content">Back to top <span aria-hidden="true">↑</span></a>
+      </aside>
+    </div>
+
+    <dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title">
+      <div class="search-dialog-heading">
+        <h2 id="search-title">Search the docs</h2>
+        <form method="dialog"><button class="round-button" type="submit" aria-label="Close search">×</button></form>
+      </div>
+      <label class="visually-hidden" for="doc-search">Find a method or control</label>
+      <input class="search-input" id="doc-search" type="text" role="searchbox" placeholder="Try maxPick or ThemePicker" autocomplete="off" spellcheck="false">
+      <p class="search-hint" id="search-status" role="status">Type to search pages, controls, and examples.</p>
+      <ul class="search-results" id="search-results"></ul>
+    </dialog>
+
+    <script src="./docs.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
