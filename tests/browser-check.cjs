@@ -127,6 +127,41 @@ async function main() {
     await page.goto(origin, { waitUntil: "domcontentloaded" });
     assert.equal(await page.locator("main h1").innerText(), "Getting started", "readers can return to English");
 
+    const landingHero = page.locator(".landing-hero");
+    assert.equal(await landingHero.count(), 1, "the landing page has one dedicated hero");
+    assert.equal(await page.locator(".landing-hero#overview").count(), 1, "the overview anchor remains stable on the landing hero");
+    assert.equal(await landingHero.locator("h1").innerText(), "Getting started", "the landing hero keeps the page heading");
+    assert.equal(await landingHero.locator(".demo-preview").count(), 1, "the landing hero reuses the interactive product preview");
+    const desktopHero = await landingHero.evaluate((hero) => {
+      const copy = hero.querySelector(".landing-copy").getBoundingClientRect();
+      const preview = hero.querySelector(".demo-preview").getBoundingClientRect();
+      return { sideBySide: copy.left < preview.left && copy.right <= preview.left + 1, textAlign: getComputedStyle(hero.querySelector(".landing-copy")).textAlign };
+    });
+    assert.deepEqual(desktopHero, { sideBySide: true, textAlign: "start" }, "the desktop landing hero is left-aligned beside the product");
+    await page.setViewportSize({ width: 360, height: 800 });
+    const mobileHero = await landingHero.evaluate((hero) => {
+      const copy = hero.querySelector(".landing-copy").getBoundingClientRect();
+      const preview = hero.querySelector(".demo-preview").getBoundingClientRect();
+      return { stacked: preview.top >= copy.bottom - 1, overflow: document.documentElement.scrollWidth > window.innerWidth };
+    });
+    assert.deepEqual(mobileHero, { stacked: true, overflow: false }, "the landing hero stacks cleanly on mobile");
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto(`${origin}#windows`, { waitUntil: "domcontentloaded" });
+    assert.equal(await page.locator(".landing-hero").count(), 0, "non-landing pages do not receive the landing hero");
+    await page.goto(origin, { waitUntil: "domcontentloaded" });
+
+    const faviconLinks = await page.locator('link[rel="icon"]').evaluateAll((links) => links.map((link) => ({ href: link.getAttribute("href"), type: link.getAttribute("type") })));
+    assert.ok(faviconLinks.some((link) => link.href === "./favicon.svg" && link.type === "image/svg+xml"), "the SVG favicon remains available");
+    assert.ok(faviconLinks.some((link) => link.href === "./favicon.png" && link.type === "image/png"), "a raster favicon fallback is declared");
+    const faviconImages = await page.evaluate((links) => Promise.all(links.map((href) => new Promise((resolve) => { const image = new Image(); image.onload = () => resolve({ href, width: image.naturalWidth, height: image.naturalHeight }); image.onerror = () => resolve({ href, width: 0, height: 0 }); image.src = href; }))), faviconLinks.map((link) => link.href));
+    assert.ok(faviconImages.some((image) => image.href.endsWith("/favicon.png") && image.width > 0 && image.height > 0), "the raster favicon loads");
+    assert.equal(await page.locator('meta[property="og:title"]').getAttribute("content"), "arod UI docs", "Open Graph title is explicit");
+    assert.equal(await page.locator('meta[property="og:url"]').getAttribute("content"), "https://arod-ui-docslol.vercel.app/", "Open Graph URL is canonical");
+    assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute("content"), "summary_large_image", "Twitter uses the large share card");
+    assert.equal((await page.locator('meta[property="og:image"]').getAttribute("content")).endsWith("/og-image.png"), true, "Open Graph image points to the local share asset on production");
+    const ogImage = await page.evaluate(() => new Promise((resolve) => { const image = new Image(); image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight }); image.onerror = () => resolve({ width: 0, height: 0 }); image.src = "./og-image.png"; }));
+    assert.deepEqual(ogImage, { width: 1200, height: 630 }, "the Open Graph image has share-card dimensions");
+
     for (const stored of ["unknown", "{broken"]) {
       await page.evaluate((value) => localStorage.setItem("arod-ui-language", value), stored);
       await page.reload({ waitUntil: "domcontentloaded" });
