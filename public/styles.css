@@ -399,6 +399,40 @@ h1 {
   line-height: 1.65;
 }
 
+.landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 16rem);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-block-start: 1.5rem;
+}
+
+.landing-copy {
+  min-inline-size: 0;
+  text-align: start;
+}
+
+.landing-copy .page-description {
+  margin-block-start: 0.75rem;
+}
+
+.landing-copy h2 {
+  margin: 2rem 0 0.7rem;
+  color: var(--ink);
+  font-size: 1.42rem;
+  line-height: 1.25;
+}
+
+.landing-copy p {
+  max-inline-size: 48rem;
+  margin: 0.55rem 0 0;
+  color: var(--body-ink);
+}
+
+.landing-hero > .demo-preview {
+  margin-block-start: 0;
+}
+
 .doc-section {
   min-inline-size: 0;
   margin-block-start: 2.65rem;
@@ -1495,6 +1529,16 @@ html:has(.search-dialog[open]) { overflow: hidden; }
 
   .page-description {
     margin-block-end: 1.5rem;
+  }
+
+  .landing-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-block-start: 1rem;
+  }
+
+  .landing-hero > .demo-preview {
+    max-inline-size: 100%;
   }
 
   .doc-section {

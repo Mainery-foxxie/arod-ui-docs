@@ -642,6 +642,16 @@
     return wrapper;
   }
 
+  function renderLandingHero(overview, heading, description) {
+    const hero = element("section", "landing-hero");
+    hero.id = overview.id;
+    const copy = element("div", "landing-copy");
+    copy.append(heading, description, element("h2", "", overview.title));
+    appendTextList(copy, overview.body);
+    hero.append(copy, renderPreview());
+    return hero;
+  }
+
   function setupPreviousNext(currentIndex) {
     const links = [[previousLink, pages[currentIndex - 1], t("Previous", "Sebelumnya")], [nextLink, pages[currentIndex + 1], t("Next", "Selanjutnya")]];
     for (const [anchor, item, label] of links) {
@@ -711,13 +721,14 @@
     const heading = element("h1", "", pageData.title);
     heading.tabIndex = -1;
     const description = element("p", "page-description", pageData.description);
-    article.append(crumb, heading, description);
+    const landingOverview = pageData.id === "getting-started" && pageData.sections[0]?.preview ? pageData.sections[0] : null;
+    article.append(crumb, landingOverview ? renderLandingHero(landingOverview, heading, description) : heading, ...(landingOverview ? [] : [description]));
     if (route.invalid) {
       const message = element("p", "note", t(`That page or section could not be found. Showing ${text(pageData.title)} instead.`, `Halaman atau bagian tersebut tidak ditemukan. Menampilkan ${text(pageData.title)}.`));
       message.setAttribute("role", "status");
       article.append(message);
     }
-    for (const item of pageData.sections) article.append(renderSection(item, pageData));
+    for (const item of pageData.sections.slice(landingOverview ? 1 : 0)) article.append(renderSection(item, pageData));
     renderContents(pageData);
     setupPreviousNext(route.pageIndex);
     document.title = `${text(pageData.title)} | arod UI`;
